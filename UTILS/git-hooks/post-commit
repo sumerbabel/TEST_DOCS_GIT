@@ -49,32 +49,32 @@ num_modified_files=$(echo "$modified_files" | wc -l)
 
 # Escribir la lista de nombres de archivos y sus tamaños en el mismo archivo
 filesNames=''
+coma=""
 for file in $modified_files; do
     size=$(du -h "$file" | cut -f1)
-    filesNames="$filesNames , $file ($size)"
+    filesNames="$filesNames $file-$size $coma"
+    coma=","
 done
-
-
 
 # Ruta al archivo CSV
 CSV_FILE_AUTOR="historial/$author_name_file.csv"
 if [ ! -f $CSV_FILE_AUTOR ]; then
-    echo "Autor;Fecha;Hora;Codigo;Modulo;Descripcion;Estado;Files" > $CSV_FILE_AUTOR
+    echo "Autor;Fecha;Hora;Codigo;Modulo;Descripcion;Estado;#Files;Files" > $CSV_FILE_AUTOR
 fi
-echo " $author_name ; $commit_date ; $commit_time; $part1 ; $part2 ; $part3 ; $part4; $filesNames ">> $CSV_FILE_AUTOR
+echo " $author_name ; $commit_date ; $commit_time; $part1 ; $part2 ; $part3 ; $part4; $num_modified_files; $filesNames ">> $CSV_FILE_AUTOR
 
 CSV_FILE="historial/requerimientos/$part1.csv"
 if [ ! -f $CSV_FILE ]; then
     echo "Autor;Fecha;Hora;Codigo;Modulo;Descripcion;Estado;Files" > $CSV_FILE
 fi
-echo " $author_name ; $commit_date ; $commit_time; $part1 ; $part2 ; $part3 ; $part4; $filesNames " >> $CSV_FILE
+echo " $author_name ; $commit_date ; $commit_time; $part1 ; $part2 ; $part3 ; $part4; $num_modified_files; $filesNames " >> $CSV_FILE
 
 # Ruta al archivo CSV
 CSV_FILE_GENERAL="historial/General.csv"
 if [ ! -f $CSV_FILE_GENERAL ]; then
     echo "Autor;Fecha;Hora;Codigo;Modulo;Descripcion;Estado;Files" > $CSV_FILE_GENERAL
 fi
-echo " $author_name ; $commit_date ; $commit_time; $part1 ; $part2 ; $part3 ; $part4; $filesNames " >> $CSV_FILE_GENERAL
+echo " $author_name ; $commit_date ; $commit_time; $part1 ; $part2 ; $part3 ; $part4; $num_modified_files; $filesNames " >> $CSV_FILE_GENERAL
 
 # Agrega commit_log.md a los cambios de Git
 git add $CSV_FILE
