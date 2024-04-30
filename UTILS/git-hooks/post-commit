@@ -52,8 +52,8 @@ filesNames=''
 coma=""
 for file in $modified_files; do
     size=$(du -h "$file" | cut -f1)
-    filesNames="$filesNames $file-$size $coma"
-    coma=","
+    filesNames="$filesNames $file - $size $coma"
+    coma="|"
 done
 
 # Ruta al archivo CSV
@@ -65,14 +65,14 @@ echo " $author_name ; $commit_date ; $commit_time; $part1 ; $part2 ; $part3 ; $p
 
 CSV_FILE="historial/requerimientos/$part1.csv"
 if [ ! -f $CSV_FILE ]; then
-    echo "Autor;Fecha;Hora;Codigo;Modulo;Descripcion;Estado;Files" > $CSV_FILE
+    echo "Autor;Fecha;Hora;Codigo;Modulo;Descripcion;Estado;#Files;Files" > $CSV_FILE
 fi
 echo " $author_name ; $commit_date ; $commit_time; $part1 ; $part2 ; $part3 ; $part4; $num_modified_files; $filesNames " >> $CSV_FILE
 
 # Ruta al archivo CSV
 CSV_FILE_GENERAL="historial/General.csv"
 if [ ! -f $CSV_FILE_GENERAL ]; then
-    echo "Autor;Fecha;Hora;Codigo;Modulo;Descripcion;Estado;Files" > $CSV_FILE_GENERAL
+    echo "Autor;Fecha;Hora;Codigo;Modulo;Descripcion;Estado;#Files;Files" > $CSV_FILE_GENERAL
 fi
 echo " $author_name ; $commit_date ; $commit_time; $part1 ; $part2 ; $part3 ; $part4; $num_modified_files; $filesNames " >> $CSV_FILE_GENERAL
 
