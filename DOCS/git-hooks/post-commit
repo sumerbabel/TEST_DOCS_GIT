@@ -44,9 +44,9 @@ fi
 
 
 # Obtener la lista de archivos modificados
-modified_files=$(git diff --name-only HEAD)
-# Contar la cantidad de archivos modificados
-num_modified_files=$(echo "$modified_files" | wc -l)
+# modified_files=$(git diff --name-only HEAD)
+# # Contar la cantidad de archivos modificados
+# num_modified_files=$(echo "$modified_files" | wc -l)
 
 # Escribir la lista de nombres de archivos y sus tamaños en el mismo archivo
 # filesNames=""
@@ -55,11 +55,25 @@ num_modified_files=$(echo "$modified_files" | wc -l)
 #     filesNames="$filesNames , $file ($size)"
 # done
 
-filesNames=""
-for file in $(find . -type f); do
+# filesNames=""
+# for file in $(find . -type f); do
+#     size=$(du -h "$file" | cut -f1)
+#     filesNames="$filesNames , $file ($size)"
+# done
+
+# Obtener la lista de archivos modificados
+modified_files=$(git diff-tree --no-commit-id --name-only -r $commit_hash)
+# Contar la cantidad de archivos modificados
+num_modified_files=$(echo "$modified_files" | wc -l)
+
+# Escribir la lista de nombres de archivos y sus tamaños en el mismo archivo
+filesNames=''
+for file in $modified_files; do
     size=$(du -h "$file" | cut -f1)
     filesNames="$filesNames , $file ($size)"
 done
+
+
 
 # Ruta al archivo CSV
 CSV_FILE_AUTOR="historial/$author_name_file.csv"
