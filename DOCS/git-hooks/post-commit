@@ -1,0 +1,87 @@
+#!/bin/sh
+# Establece la variable de entorno LANG para soportar UTF-8
+export LANG="en_US.UTF-8"
+# Define el archivo de bloqueo
+lock_file=".git/hooks/post-commit.lock"
+
+# Si el archivo de bloqueo existe, entonces el script ya se está ejecutando
+if [ -f "$lock_file" ]; then
+    exit 0
+fi
+
+# Crea el archivo de bloqueo
+touch $lock_file
+
+# Obtén el hash del último commit
+commit_hash=$(git rev-parse HEAD)
+
+# Obtén el autor del último commit
+author_name=$(git log -1 --pretty=format:'%an')
+author_name_file=$(git log -1 --pretty=format:'%an' | sed 's/ /-/g')
+
+# Obtén la fecha del último commit en formato DIA/MES/AÑO
+commit_date=$(git log -1 --pretty=format:'%ad' --date=format:'%d/%m/%Y')
+
+# Obtén la hora del último commit en formato hora:minuto:segundo
+commit_time=$(git log -1 --pretty=format:'%ad' --date=format:'%T')
+
+# Obtén el mensaje del último commit
+commit_message=$(git log -1 --pretty=%B)
+
+# Divide el mensaje del commit en partes basándote en el carácter "-"
+# Comprueba si el mensaje del commit contiene un "-"
+part1=""
+part2=""
+part3=""
+part4=""
+if [[ $commit_message == *"-"* ]]; then
+    # Divide el mensaje del commit en partes basándote en el carácter "-"
+    part1=$(echo $commit_message | cut -d '-' -f 1)
+    part2=$(echo $commit_message | cut -d '-' -f 2)
+    part3=$(echo $commit_message | cut -d '-' -f 3)
+    part4=$(echo $commit_message | cut -d '-' -f 4)
+fi
+
+
+# Obtener la lista de archivos modificados
+modified_files=$(git diff --name-only --cached)
+# Contar la cantidad de archivos modificados
+num_modified_files=$(echo "$modified_files" | wc -l)
+
+# Escribir la lista de nombres de archivos y sus tamaños en el mismo archivo
+filesName=''
+for file in $modified_files; do
+    size=$(du -h "$file" | cut -f1)
+    filesName = "$filesName , $file ($size)"
+done
+
+# Ruta al archivo CSV
+CSV_FILE_AUTOR="historial/$author_name_file.csv"
+if [ ! -f $CSV_FILE_AUTOR ]; then
+    echo "Autor;Fecha;Hora;Codigo;Modulo;Descripcion;Estado;Files" > $CSV_FILE_AUTOR
+fi
+echo " $author_name ; $commit_date ; $commit_time; $part1 ; $part2 ; $part3 ; $part4; $filesName">> $CSV_FILE_AUTOR
+
+CSV_FILE="historial/req_tk/$part1.csv"
+if [ ! -f $CSV_FILE ]; then
+    echo "Autor;Fecha;Hora;Codigo;Modulo;Descripcion;Estado;Files" > $CSV_FILE
+fi
+echo " $author_name ; $commit_date ; $commit_time; $part1 ; $part2 ; $part3 ; $part4; $filesName" >> $CSV_FILE
+
+# Ruta al archivo CSV
+CSV_FILE_GENERAL="historial/General.csv"
+if [ ! -f $CSV_FILE_GENERAL ]; then
+    echo "Autor;Fecha;Hora;Codigo;Modulo;Descripcion;Estado;Files" > $CSV_FILE_GENERAL
+fi
+echo " $author_name ; $commit_date ; $commit_time; $part1 ; $part2 ; $part3 ; $part4; $filesName" >> $CSV_FILE_GENERAL
+
+# Agrega commit_log.md a los cambios de Git
+git add $CSV_FILE
+git add $CSV_FILE_AUTOR
+git add $CSV_FILE_GENERAL
+
+# Crea un nuevo commit con commit_log.md
+git commit --amend --no-edit --allow-empty
+
+# Elimina el archivo de bloqueo
+rm $lock_file
