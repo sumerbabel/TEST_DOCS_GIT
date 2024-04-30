@@ -1,3 +1,3 @@
 export function grados(){
-    return ssssss''
+    return count 2o000''
 }
