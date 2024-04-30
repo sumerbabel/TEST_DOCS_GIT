@@ -7,3 +7,4 @@ Autor;Fecha;Hora;Codigo;Modulo;Descripcion;Estado;Files
  Paul Aquino Gutierrez ; 30/04/2024 ; 12:48:36; REQ001 ; GENERAL ; MEMSMS ; 10%;  , DOCS/git-hooks/post-commit (4.0K) 
  Paul Aquino Gutierrez ; 30/04/2024 ; 14:00:49; REQ001 ; GENERAL ; MEMSMS ; 10%;  , DOCS/pak1/file1.txt (0) , DOCS/paq2/file2.txt (0) 
  Paul Aquino Gutierrez ; 30/04/2024 ; 14:02:45; REQ001 ; GENERAL ; MEMSMS ; 10%;  , DOCS/pak1/file1.txt (1.0K) , DOCS/paq2/file2.txt (1.0K) 
+ Paul Aquino Gutierrez ; 30/04/2024 ; 15:02:57; REQ001 ; GENERAL ; MEMSMS ; 10%;  , DOCS/pak1/dato.ts (0) , DOCS/pak1/file1.txt (1.0K) 
