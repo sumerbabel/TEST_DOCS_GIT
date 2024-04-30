@@ -42,25 +42,6 @@ if [[ $commit_message == *"-"* ]]; then
     part4=$(echo $commit_message | cut -d '-' -f 4)
 fi
 
-
-# Obtener la lista de archivos modificados
-# modified_files=$(git diff --name-only HEAD)
-# # Contar la cantidad de archivos modificados
-# num_modified_files=$(echo "$modified_files" | wc -l)
-
-# Escribir la lista de nombres de archivos y sus tamaños en el mismo archivo
-# filesNames=""
-# for file in $modified_files; do
-#     size=$(du -h "$file" | cut -f1)
-#     filesNames="$filesNames , $file ($size)"
-# done
-
-# filesNames=""
-# for file in $(find . -type f); do
-#     size=$(du -h "$file" | cut -f1)
-#     filesNames="$filesNames , $file ($size)"
-# done
-
 # Obtener la lista de archivos modificados
 modified_files=$(git diff-tree --no-commit-id --name-only -r $commit_hash)
 # Contar la cantidad de archivos modificados
@@ -82,7 +63,7 @@ if [ ! -f $CSV_FILE_AUTOR ]; then
 fi
 echo " $author_name ; $commit_date ; $commit_time; $part1 ; $part2 ; $part3 ; $part4; $filesNames ">> $CSV_FILE_AUTOR
 
-CSV_FILE="historial/req_tk/$part1.csv"
+CSV_FILE="historial/requerimientos/$part1.csv"
 if [ ! -f $CSV_FILE ]; then
     echo "Autor;Fecha;Hora;Codigo;Modulo;Descripcion;Estado;Files" > $CSV_FILE
 fi
