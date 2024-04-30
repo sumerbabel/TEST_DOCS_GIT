@@ -49,8 +49,14 @@ modified_files=$(git diff --name-only HEAD)
 num_modified_files=$(echo "$modified_files" | wc -l)
 
 # Escribir la lista de nombres de archivos y sus tamaños en el mismo archivo
+# filesNames=""
+# for file in $modified_files; do
+#     size=$(du -h "$file" | cut -f1)
+#     filesNames="$filesNames , $file ($size)"
+# done
+
 filesNames=""
-for file in $modified_files; do
+for file in $(find . -type f); do
     size=$(du -h "$file" | cut -f1)
     filesNames="$filesNames , $file ($size)"
 done
