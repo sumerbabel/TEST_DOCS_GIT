@@ -44,7 +44,7 @@ fi
 
 
 # Obtener la lista de archivos modificados
-modified_files=$(git diff --name-only --cached)
+modified_files=$(git diff --name-only HEAD)
 # Contar la cantidad de archivos modificados
 num_modified_files=$(echo "$modified_files" | wc -l)
 
