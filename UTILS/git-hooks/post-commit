@@ -48,11 +48,11 @@ modified_files=$(git diff-tree --no-commit-id --name-only -r $commit_hash)
 num_modified_files=$(echo "$modified_files" | wc -l)
 
 # Escribir la lista de nombres de archivos y sus tamaños en el mismo archivo
-filesNames=''
+filesNames=""
 coma=""
 for file in $modified_files; do
     size=$(du -h "$file" | cut -f1)
-    filesNames="$filesNames $file - $size $coma"
+    filesNames="$filesNames $coma $file - $size"
     coma="|"
 done
 
